@@ -15,7 +15,7 @@
 package main
 
 import (
-	"github.com/googleapis/gnostic-grpc/generator"
+	"github.com/rodherz/gnostic-grpc/generator"
 )
 
 func main() {
