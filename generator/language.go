@@ -60,7 +60,14 @@ func findNativeType(fType string, fFormat string) string {
 	case "boolean":
 		return "bool"
 	case "number":
-		return "int32"
+		switch fFormat {
+		case "float":
+			return "float"
+		case "double":
+			return "double"
+		default:
+			return "float"
+		}
 	case "integer":
 		switch fFormat {
 		case "int32":
@@ -68,7 +75,7 @@ func findNativeType(fType string, fFormat string) string {
 		case "int64":
 			return "int64"
 		default:
-			return "int64"
+			return "int32"
 		}
 	case "object":
 		return "message"
