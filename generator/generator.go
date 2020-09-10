@@ -55,31 +55,39 @@ func (renderer *Renderer) runFileDescriptorSetGenerator() (fdSet *dpb.FileDescri
 	syntax := "proto3"
 	n := renderer.Package + ".proto"
 
+	// add option for proto lite runtime
+	t := dpb.FileOptions_LITE_RUNTIME
+	opt := &dpb.FileOptions{
+		OptimizeFor: &t,
+	}
+
 	// mainProto is the proto we ultimately want to render.
 	mainProto := &dpb.FileDescriptorProto{
 		Name:    &n,
 		Package: &renderer.Package,
 		Syntax:  &syntax,
+		Options: opt,
 	}
+
 	fdSet = &dpb.FileDescriptorSet{
 		File: []*dpb.FileDescriptorProto{mainProto},
 	}
 
-	buildDependencies(fdSet)
-	err = buildSymbolicReferences(fdSet, renderer)
-	if err != nil {
-		return nil, err
-	}
+	// buildDependencies(fdSet)
+	// err = buildSymbolicReferences(fdSet, renderer)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	err = buildMessagesFromTypes(mainProto, renderer)
 	if err != nil {
 		return nil, err
 	}
 
-	err = buildServiceFromMethods(mainProto, renderer)
-	if err != nil {
-		return nil, err
-	}
+	// err = buildServiceFromMethods(mainProto, renderer)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	addDependencies(fdSet)
 
