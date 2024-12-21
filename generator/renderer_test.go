@@ -15,14 +15,16 @@
 package generator
 
 import (
-	surface "github.com/googleapis/gnostic/surface"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path"
 	"path/filepath"
 	"strings"
 	"testing"
+
+	surface "github.com/google/gnostic/surface"
+
+	"github.com/google/gnostic-grpc/utils"
 )
 
 const (
@@ -37,7 +39,7 @@ const (
 func TestFileDescriptorGeneratorParameters(t *testing.T) {
 	input := "testfiles/parameters.yaml"
 
-	protoData, err := runGeneratorWithoutEnvironment(input, "parameters")
+	protoData, err := runGeneratorWithoutPluginEnvironment(input, "parameters")
 	if err != nil {
 		handleError(err, t)
 	}
@@ -48,7 +50,7 @@ func TestFileDescriptorGeneratorParameters(t *testing.T) {
 func TestFileDescriptorGeneratorRequestBodies(t *testing.T) {
 	input := "testfiles/requestBodies.yaml"
 
-	protoData, err := runGeneratorWithoutEnvironment(input, "requestbodies")
+	protoData, err := runGeneratorWithoutPluginEnvironment(input, "requestbodies")
 	if err != nil {
 		handleError(err, t)
 	}
@@ -60,7 +62,7 @@ func TestFileDescriptorGeneratorRequestBodies(t *testing.T) {
 func TestFileDescriptorGeneratorResponses(t *testing.T) {
 	input := "testfiles/responses.yaml"
 
-	protoData, err := runGeneratorWithoutEnvironment(input, "responses")
+	protoData, err := runGeneratorWithoutPluginEnvironment(input, "responses")
 	if err != nil {
 		handleError(err, t)
 	}
@@ -70,7 +72,7 @@ func TestFileDescriptorGeneratorResponses(t *testing.T) {
 func TestFileDescriptorGeneratorOther(t *testing.T) {
 	input := "testfiles/other.yaml"
 
-	protoData, err := runGeneratorWithoutEnvironment(input, "other")
+	protoData, err := runGeneratorWithoutPluginEnvironment(input, "other")
 	if err != nil {
 		handleError(err, t)
 	}
@@ -82,7 +84,7 @@ func TestFileDescriptorGeneratorOther(t *testing.T) {
 		errorMessages := map[string]bool{
 			"cycle in imports: cyclic_dependency_2.proto -> cyclic_dependency_1.proto -> cyclic_dependency_2.proto": true,
 		}
-		protoData, err = runGeneratorWithoutEnvironment(errorInput, "cyclic_dependency_1")
+		protoData, err = runGeneratorWithoutPluginEnvironment(errorInput, "cyclic_dependency_1")
 		if _, ok := errorMessages[err.Error()]; !ok {
 			// If we don't get an error from the generator the test fails!
 			handleError(err, t)
@@ -90,7 +92,7 @@ func TestFileDescriptorGeneratorOther(t *testing.T) {
 	}
 }
 
-func runGeneratorWithoutEnvironment(input string, packageName string) ([]byte, error) {
+func runGeneratorWithoutPluginEnvironment(input string, packageName string) ([]byte, error) {
 	surfaceModel, err := buildSurfaceModel(input)
 	if err != nil {
 		return nil, err
@@ -112,9 +114,10 @@ func runGeneratorWithoutEnvironment(input string, packageName string) ([]byte, e
 }
 
 func buildSurfaceModel(input string) (*surface.Model, error) {
-	cmd := exec.Command("gnostic", "--pb-out=-", input)
-	b, _ := cmd.Output()
-	documentv3, _ := createOpenAPIDocFromGnosticOutput(b)
+	documentv3, err := utils.ParseOpenAPIDoc(input)
+	if err != nil {
+		return nil, err
+	}
 	surfaceModel, err := surface.NewModelFromOpenAPI3(documentv3, input)
 	return surfaceModel, err
 }

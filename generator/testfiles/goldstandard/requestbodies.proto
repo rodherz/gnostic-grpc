@@ -8,6 +8,8 @@ import "google/protobuf/descriptor.proto";
 
 import "google/protobuf/empty.proto";
 
+option go_package = ".;requestbodies";
+
 message Person {
   int64 id = 1;
 
@@ -18,20 +20,22 @@ message Person {
   repeated string photo_urls = 4;
 }
 
-message TestRequestBodyParameters {
+//TestRequestBodyParameters holds parameters to TestRequestBody
+message TestRequestBodyRequest {
   Person person = 1;
 }
 
-message TestRequestBodyReferenceParameters {
+//TestRequestBodyReferenceParameters holds parameters to TestRequestBodyReference
+message TestRequestBodyReferenceRequest {
   Person person = 1;
 }
 
 service Requestbodies {
-  rpc TestRequestBody ( TestRequestBodyParameters ) returns ( google.protobuf.Empty ) {
+  rpc TestRequestBody ( TestRequestBodyRequest ) returns ( google.protobuf.Empty ) {
     option (google.api.http) = { get:"/testRequestBody" body:"person"  };
   }
 
-  rpc TestRequestBodyReference ( TestRequestBodyReferenceParameters ) returns ( google.protobuf.Empty ) {
+  rpc TestRequestBodyReference ( TestRequestBodyReferenceRequest ) returns ( google.protobuf.Empty ) {
     option (google.api.http) = { get:"/testRequestBodyReference" body:"person"  };
   }
 }

@@ -17,11 +17,10 @@ package generator
 import (
 	"github.com/golang/protobuf/proto"
 	dpb "github.com/golang/protobuf/protoc-gen-go/descriptor"
-	plugins "github.com/googleapis/gnostic/plugins"
-	surface "github.com/googleapis/gnostic/surface"
+	plugins "github.com/google/gnostic/plugins"
+	surface "github.com/google/gnostic/surface"
 	prDesc "github.com/jhump/protoreflect/desc"
 	prPrint "github.com/jhump/protoreflect/desc/protoprint"
-	_ "os"
 )
 
 // Renderer generates a .proto file based on the information inside Model.
@@ -42,7 +41,7 @@ func NewRenderer(model *surface.Model) (renderer *Renderer) {
 	return renderer
 }
 
-// Generate runs the renderer to generate the named files.
+// Render runs the renderer to generate the named files.
 func (renderer *Renderer) Render(response *plugins.Response, fileName string) (err error) {
 	renderer.FdSet, err = renderer.runFileDescriptorSetGenerator()
 

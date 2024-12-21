@@ -8,14 +8,14 @@ OpenAPI description.
 
 
 #### What we will build:
-![alt text](https://raw.githubusercontent.com/googleapis/gnostic-grpc/master/examples/images/end-to-end-envoy.png "gRPC with Transcoding")
+![alt text](https://raw.githubusercontent.com/google/gnostic-grpc/master/examples/images/end-to-end-envoy.png "gRPC with Transcoding")
 
 #### Prerequisite
-Install [gnostic](https://github.com/googleapis/gnostic), [gnostic-grpc](https://github.com/googleapis/gnostic-grpc),
+Install [gnostic](https://github.com/google/gnostic), [gnostic-grpc](https://github.com/google/gnostic-grpc),
 [go plugin for protoc](https://github.com/golang/protobuf/protoc-gen-go), and [gRPC](https://grpc.io/).
 
-    go get -u github.com/googleapis/gnostic
-    go get -u github.com/googleapis/gnostic-grpc
+    go get -u github.com/google/gnostic
+    go get -u github.com/google/gnostic-grpc
     go get -u github.com/golang/protobuf/protoc-gen-go
     go get -u google.golang.org/grpc
     
@@ -27,7 +27,7 @@ In order for this tutorial to work you should work inside this directory under `
 
 #### 1. Step: Generate a gRPC service (.proto) from an OpenAPI description
 
-Use [gnostic](https://github.com/googleapis/gnostic) to generate the Protocol buffer 
+Use [gnostic](https://github.com/google/gnostic) to generate the Protocol buffer 
 description (`bookstore.proto`) in the current directory:
 
     gnostic --grpc-out=. bookstore.yaml
@@ -58,7 +58,7 @@ requests to localhost:51051.
   
 Get the envoy docker image:
 
-    docker pull envoyproxy/envoy-dev:bcc66c6b74c365d1d2834cfe15b847ae13be0eb6  
+    docker pull envoyproxy/envoy-dev:5d95032baa803f853e9120048b56c8be3dab4b0d  
   
 The file `envoy-proxy/Dockerfile` uses the envoy image we just pulled as base image and copies `envoy.yaml`
 and `proto.pb` to the filesystem of the docker container.  

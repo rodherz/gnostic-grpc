@@ -15,31 +15,39 @@
 package generator
 
 import (
-	openapiv3 "github.com/googleapis/gnostic/openapiv3"
-	plugins "github.com/googleapis/gnostic/plugins"
-	"os/exec"
 	"testing"
+
+	plugins "github.com/google/gnostic/plugins"
+
+	"github.com/google/gnostic-grpc/utils"
 )
 
 func TestNewFeatureCheckerParameters(t *testing.T) {
 	input := "testfiles/parameters.yaml"
-	documentv3 := readOpenAPIBinary(input)
+	documentv3, err := utils.ParseOpenAPIDoc(input)
+	if err != nil {
+		t.Errorf("Error while parsing input file: %s", input)
+		return
+	}
 
 	checker := NewGrpcChecker(documentv3)
 	messages := checker.Run()
 	expectedMessageKeys := [][]string{
+		{"components", "parameters", "required"},
 		{"paths", "/testParameterQueryEnum", "get", "parameters", "explode"},
 		{"paths", "/testParameterQueryEnum", "get", "parameters", "schema", "items", "default"},
-		{"paths", "/testParameterQueryEnum", "get", "parameters", "schema", "items", "enum"},
 		{"paths", "/testParameterPathEnum/{param1}", "get", "parameters", "schema", "default"},
-		{"paths", "/testParameterPathEnum/{param1}", "get", "parameters", "schema", "enum"},
 	}
 	validateKeys(t, expectedMessageKeys, messages)
 }
 
 func TestFeatureCheckerRequestBodies(t *testing.T) {
 	input := "testfiles/requestBodies.yaml"
-	documentv3 := readOpenAPIBinary(input)
+	documentv3, err := utils.ParseOpenAPIDoc(input)
+	if err != nil {
+		t.Errorf("Error while parsing input file: %s", input)
+		return
+	}
 
 	checker := NewGrpcChecker(documentv3)
 	messages := checker.Run()
@@ -54,7 +62,11 @@ func TestFeatureCheckerRequestBodies(t *testing.T) {
 
 func TestFeatureCheckerResponses(t *testing.T) {
 	input := "testfiles/responses.yaml"
-	documentv3 := readOpenAPIBinary(input)
+	documentv3, err := utils.ParseOpenAPIDoc(input)
+	if err != nil {
+		t.Errorf("Error while parsing input file: %s", input)
+		return
+	}
 
 	checker := NewGrpcChecker(documentv3)
 	messages := checker.Run()
@@ -69,7 +81,11 @@ func TestFeatureCheckerResponses(t *testing.T) {
 
 func TestFeatureCheckerOther(t *testing.T) {
 	input := "testfiles/other.yaml"
-	documentv3 := readOpenAPIBinary(input)
+	documentv3, err := utils.ParseOpenAPIDoc(input)
+	if err != nil {
+		t.Errorf("Error while parsing input file: %s", input)
+		return
+	}
 
 	checker := NewGrpcChecker(documentv3)
 	messages := checker.Run()
@@ -94,11 +110,4 @@ func validateKeys(t *testing.T, expectedKeys [][]string, messages []*plugins.Mes
 			}
 		}
 	}
-}
-
-func readOpenAPIBinary(input string) *openapiv3.Document {
-	cmd := exec.Command("gnostic", "--pb-out=-", input)
-	b, _ := cmd.Output()
-	documentv3, _ := createOpenAPIDocFromGnosticOutput(b)
-	return documentv3
 }
