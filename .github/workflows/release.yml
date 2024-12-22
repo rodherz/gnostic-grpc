@@ -13,15 +13,20 @@ jobs:
         goos: [linux, windows, darwin]
         goarch: [amd64]
     steps:
-    - uses: actions/checkout@v2
-    - run: sh ./COMPILE-PROTOS.sh
-    - uses: wangyoucao577/go-release-action@v1
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        goos: ${{ matrix.goos }}
-        goarch: ${{ matrix.goarch }}
-        goversion: "https://go.dev/dl/go1.22.10.linux-amd64.tar.gz"
-        pre_command: "go mod tidy"
-        project_path: "./plugin"
-        binary_name: gnostic-grpc
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v3
+
+      - name: Build Release
+        uses: wangyoucao577/go-release-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goos: ${{ matrix.goos }}
+          goarch: ${{ matrix.goarch }}
+          goversion: "https://go.dev/dl/go1.22.10.linux-amd64.tar.gz"
+          pre_command: "sh ./COMPILE-PROTOS.sh && go mod tidy"
+          project_path: "./plugin"
+          binary_name: gnostic-grpc
 
