@@ -105,17 +105,22 @@ func findNativeType(fType string, fFormat string) string {
 	case "byte":
 		return "string"
 	default:
-		if strings.Contains(fType, "map") {
-			mapType := fType[11:]
-			formattedType := map[string]bool{
-				"int32": true,
-				"int64": true,
+		/*
+			// this code block attempts to convert a map by the assumption as follows:
+			// OAI v3 only allows dictionaries where the keys are strings https://swagger.io/docs/specification/v3_0/data-models/dictionaries/
+			// so for a type like "map[string]xxx", map value type "xxx" is defined in the position [11:] in the whole type name slice
+			if strings.Contains(fType, "map") {
+				mapType := fType[11:]
+				formattedType := map[string]bool{
+					"int32": true,
+					"int64": true,
+				}
+				if !formattedType[mapType] {
+					return "map[string]" + findNativeType(mapType, "")
+				}
+				return fType
 			}
-			if !formattedType[mapType] {
-				return "map[string]" + findNativeType(mapType, "")
-			}
-			return fType
-		}
+		*/
 		return protoTypeName(fType)
 	}
 }
