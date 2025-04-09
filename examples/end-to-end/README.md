@@ -12,11 +12,11 @@ OpenAPI description.
 
 #### Prerequisite
 Install [gnostic](https://github.com/google/gnostic), [gnostic-grpc](https://github.com/google/gnostic-grpc),
-[go plugin for protoc](https://github.com/golang/protobuf/protoc-gen-go), and [gRPC](https://grpc.io/).
+[go plugin for protoc](https://google.golang.org/protobuf/cmd/protoc-gen-go), and [gRPC](https://grpc.io/).
 
     go get -u github.com/google/gnostic
     go get -u github.com/google/gnostic-grpc
-    go get -u github.com/golang/protobuf/protoc-gen-go
+    go get -u google.golang.org/protobuf/cmd/protoc-gen-go
     go get -u google.golang.org/grpc
     
 For simplicity lets create a temporary environment variable inside your terminal:
