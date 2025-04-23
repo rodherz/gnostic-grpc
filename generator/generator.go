@@ -99,6 +99,7 @@ func buildSourceCodeInfo(types []*surface_v1.Type) (sourceCodeInfo *dpb.SourceCo
 		location := &dpb.SourceCodeInfo_Location{
 			Path:            []int32{4, int32(idx)},
 			LeadingComments: &surfaceType.Description,
+			Span:            []int32{0, 0, 0, 0},
 		}
 		allLocations = append(allLocations, location)
 	}
