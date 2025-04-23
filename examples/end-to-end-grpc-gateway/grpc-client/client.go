@@ -21,8 +21,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc"
+	empty "google.golang.org/protobuf/types/known/emptypb"
 
 	"github.com/google/gnostic-grpc/examples/end-to-end-grpc-gateway/bookstore"
 )

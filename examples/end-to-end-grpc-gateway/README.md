@@ -24,12 +24,12 @@ This tutorial has six steps:
 
 #### Prerequisite
 Install [gnostic](https://github.com/google/gnostic), [gnostic-grpc](https://github.com/google/gnostic-grpc),
-[go plugin for protoc](https://github.com/golang/protobuf/protoc-gen-go), [gRPC gateway plugin](https://github.com/grpc-ecosystem/grpc-gateway)
+[go plugin for protoc](https://google.golang.org/protobuf/cmd/protoc-gen-go), [gRPC gateway plugin](https://github.com/grpc-ecosystem/grpc-gateway)
 and [gRPC](https://grpc.io/)
 
     go get -u github.com/google/gnostic
     go get -u github.com/google/gnostic-grpc
-    go get -u github.com/golang/protobuf/protoc-gen-go
+    go get -u google.golang.org/protobuf/cmd/protoc-gen-go
     go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
     go get -u google.golang.org/grpc
     

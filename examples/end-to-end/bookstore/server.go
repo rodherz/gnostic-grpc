@@ -22,15 +22,14 @@ import (
 	"net"
 	"sync"
 
-	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc"
+	empty "google.golang.org/protobuf/types/known/emptypb"
 )
 
 const (
 	port = ":50051"
 )
 
-//
 // The Service type implements a bookstore server.
 // All objects are managed in an in-memory non-persistent store.
 //
